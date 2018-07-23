@@ -96,8 +96,9 @@ public extension ChannelPipeline {
     public func configureHTTPServerPipeline(first: Bool = false,
                                             withPipeliningAssistance pipelining: Bool = true,
                                             withServerUpgrade upgrade: HTTPUpgradeConfiguration? = nil,
-                                            withErrorHandling errorHandling: Bool = false) -> EventLoopFuture<Void> {
-        let responseEncoder = HTTPResponseEncoder()
+                                            withErrorHandling errorHandling: Bool = false,
+											withCustomResponseHandler customResponseEncoder: Class? = nil) -> EventLoopFuture<Void> {
+		let responseEncoder = customResponseEncoder == nil ? HTTPResponseEncoder() : customResponseEncoder
         let requestDecoder = HTTPRequestDecoder(leftOverBytesStrategy: upgrade == nil ? .dropBytes : .forwardBytes)
 
         var handlers: [ChannelHandler] = [responseEncoder, requestDecoder]
