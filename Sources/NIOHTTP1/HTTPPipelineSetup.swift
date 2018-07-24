@@ -111,9 +111,9 @@ public extension ChannelPipeline {
             handlers.append(HTTPServerProtocolErrorHandler())
         }
 
-        if let (upgraders, completionHandler) = upgrade {
+        if responseEncoder == nil, let (upgraders, completionHandler) = upgrade {
             let upgrader = HTTPServerUpgradeHandler(upgraders: upgraders,
-                                                    httpEncoder: responseEncoder,
+                                                    httpEncoder: responseEncoder as! HTTPResponseEncoder,
                                                     extraHTTPHandlers: Array(handlers.dropFirst()),
                                                     upgradeCompletionHandler: completionHandler)
             handlers.append(upgrader)
